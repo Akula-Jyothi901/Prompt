@@ -1,0 +1,178 @@
+Context: I have an existing XML comparison framework that is under C:\Users\POS-TRUNK-USER\Desktop\NaxmlAutomation\NaxmlAutomation
+ 
+New Requirement: Extend the framework to support multiple customer databases with the following workflow:
+Per-Customer Process:
+	1. To back up the original registry settings along with the database, and restore both at the end.
+	2. Stop the InterBase service
+	3. Navigate to the specified customer folder (C:\Users\POS-TRUNK-USER\Desktop\Different Cust)
+	4. Locate two files in the customer's subfolder:
+		○ office.ib (InterBase database file)
+		○ office.reg (Registry file)
+	5. Copy office.ib to C:\Office\DB\
+	6. Register office.reg (apply registry settings)
+	7. Start the InterBase service
+	8. Execute the existing framework to:
+		○ Generate XML exports
+		○ Perform XML comparisons
+	9. Repeat steps 2-8 for each customer in the list
+Expected Input:
+	• List of customer folder paths 
+Expected Output:
+	• XML comparison results for each customer
+	• Log file indicating success/failure per customer
+	• Consolidated report across all customers
+
+Context: I have an XML comparison framework that processes multiple customer databases. The framework:
+	• Iterates through multiple customer folders
+	• Stops InterBase service, places customer's office.ib at C:\office\db\, registers office.reg
+	• Starts InterBase service and generates XML files
+	• Compares XML files (old vs new)
+	• Currently identifies files with differences
+	
+New Requirement: Extend the framework to organize comparison results by moving files with differences to customer-specific result folders, with cleanup of existing folders before each customer run.
+Detailed Requirements:
+	1. Folder Structure to Create:
+C:\Users\POS-TRUNK-USER\Desktop\NaxmlAutomation_multi cust\NaxmlAutomation\Results\
+└── [CustomerName]\          (e.g., "Calgory")
+    ├── old\                 (contains old XML files with differences)
+    └── new\                 (contains new XML files with differences)
+	2. Pre-Processing Cleanup:
+		○ BEFORE processing each customer:
+			§ Check if Results\[CustomerName]\old\ exists → DELETE the entire folder and its contents
+			§ Check if Results\[CustomerName]\new\ exists → DELETE the entire folder and its contents
+			§ This ensures clean slate for each customer run
+		○ THEN create fresh empty folders:
+			§ Results\[CustomerName]\old\
+			§ Results\[CustomerName]\new\
+	3. File Movement Logic:
+		○ After XML comparison for each customer:
+			§ If differences are found in a file (e.g., menu.xml):
+				□ Move OLD version → Results\[CustomerName]\old\menu.xml
+				□ Move NEW version → Results\[CustomerName]\new\menu.xml
+			§ If NO differences found in a file:
+				□ Do NOT move/copy the file
+	4. Customer Name Handling:
+		○ Extract customer name from the customer folder path
+		○ Use it to create the Results subfolder dynamically
+
+Context: The XML comparison framework creates customer-specific result folders with this structure:
+Results\
+└── [CustomerName]\
+    ├── old\
+    └── new\
+Before processing each customer, the existing old\ and new\ folders are deleted and recreated.
+New Requirement: Add timestamp to the Results folder name itself to preserve historical comparison results.
+Detailed Requirements:
+	1. New Folder Structure with Timestamp:
+
+Results_[Timestamp]\
+└── [CustomerName]\
+    ├── old\
+    └── new\
+
+Example:
+Results_20251126_143045\Calgory\old\
+Results_20251126_143045\Calgory\new\
+Results_20251126_143045\Quickcheck\old\
+Results_20251126_143045\Quickcheck\new\
+	2. Timestamp Format (REQUIRED):
+		○ Folder Name Format: Results_YYYYMMDD_HHMMSS
+		○ Example: Results_20251126_143045 (November 26, 2025 at 2:30:45 PM)
+		○ Use system datetime when the framework run starts (at the beginning, before processing any customer)
+		○ Same timestamp for ALL customers in a single run
+	3. Key Changes:
+		○ REMOVE the cleanup/deletion logic for old\ and new\ folders
+		○ ADD timestamp generation at framework start (BEFORE customer loop)
+		○ UPDATE all folder paths to use Results_[Timestamp] instead of Results
+		○ USE same timestamp for all customers in a single run
+		○ NO cleanup logic needed for old runs
+	Expected Folder Structure After Multiple Runs:
+C:\Users\POS-TRUNK-USER\Desktop\NaxmlAutomation_multi cust\NaxmlAutomation\
+├── Results_20251126_143045\
+│   ├── Calgory\
+│   │   ├── old\
+│   │   └── new\
+│   └── QuickCheck\
+│       ├── old\
+│       └── new\
+└── Results_20251127_100000\
+    ├── Calgory\
+    │   ├── old\
+    │   └── new\
+    └── QuickCheck\
+        ├── old\
+        └── new\
+Context: The XML comparison framework generates a log file at C:\Office\Log\NaxmlExport.log during execution. The framework creates timestamped results folders: Results_YYYYMMDD_HHMMSS\[CustomerName]\old and new.
+Requirement:
+	• Before run: Delete existing C:\Office\Log\NaxmlExport.log
+	• After run: Copy C:\Office\Log\NaxmlExport.log to the timestamped Results folder
+
+PROMPT FOR COPILOT:
+Context: The XML comparison framework currently works exclusively with InterBase database service. I need to add support for Firebird database service as an alternative.
+Current Implementation Analysis:
+	1. Service Management (multi_customer_naxml.py):
+		○ initialize_services(): Stops InterBase before processing all customers
+		○ restore_services(): Starts InterBase after all customers are processed
+		○ Uses batch files: StopServices/Stopservices.batShortcut.lnk and StartServices/Startservices.batShortcut.lnk
+	2. InterBase Service Class (database_manager.py):
+		○ InterBaseService class has stop() and start() methods
+		○ Uses Windows net stop/start "InterBase Guardian - DefaultInstance" commands
+		○ Service control happens in restore_database_and_registry() method
+	3. Batch Files (Services/ folder):
+		○ StopServices.bat: Stops InterBase Guardian
+		○ StartServices.bat: Starts InterBase Guardian
+		○ Also manage StorePoint POS Server, tdm-naxml-agent, STPTaskService
+Requirements:
+1. Configuration-Based Service Selection:
+	• Add a configuration parameter to specify database type: "InterBase" or "Firebird"
+	• Configuration should be set ONCE at framework level (applies to ALL customers in a run)
+	• Default: InterBase (for backward compatibility)
+	• Configuration location: Simple config file
+2. Database Service Class Structure:
+	• Create a base DatabaseService class with stop() and start() methods
+	• Keep existing InterBaseService class (inherits from base)
+	• Create new FirebirdService class (inherits from base)
+	• Service names:
+		○ InterBase: "InterBase Guardian - DefaultInstance"
+		○ Firebird: "Firebird Server - DefaultInstance"
+3. Dynamic Service Selection:
+	• In MultiCustomerProcessor.__init__(): Select service based on config
+	• In initialize_services(): Use selected service to stop
+	• In restore_services(): Use selected service to start
+	• In DatabaseManager.restore_database_and_registry(): Use selected service
+4. Batch File Updates:
+	• Update StopServices.bat to accept database type parameter OR
+	• Create separate batch files: StopServicesInterBase.bat and StopServicesFirebird.bat
+	• Same for StartServices.bat
+	• Maintain existing service order (StorePoint POS Server, tdm-naxml-agent, STPTaskService)
+5. Logging:
+	• Log which database service is being used at framework start
+	• Log service stop/start operations with service name
+6. Key Constraints:
+	• Database type applies to ALL customers in a single run (not per-customer)
+	• No breaking changes to existing InterBase functionality
+	• Keep backward compatibility
+Implementation Steps:
+	1. Add database type configuration (InterBase/Firebird)
+	2. Create DatabaseService base class
+	3. Refactor InterBaseService to inherit from base
+	4. Create FirebirdService class
+	5. Update MultiCustomerProcessor to select service dynamically
+	6. Update batch files for both services
+	7. Add logging for service selection and operations
+
+
+Documentation:
+
+Generate documentation for our XML comparison framework enhancements in a format that can be easily copied into Microsoft Word.
+Requirements:
+- Use simple formatting (headings, bullet points, numbered lists)
+- Avoid complex Markdown syntax
+- Include all sections: Overview, Features, Setup, Usage, Technical Details
+- Format code examples in plain text blocks
+- Make it copy-paste friendly for Word
+Documentation should cover:
+1. Multi-customer support enhancement
+2. Dynamic results organization (old/new folders per customer)
+3. Automatic cleanup of existing results
+4. Complete workflow and folder structure

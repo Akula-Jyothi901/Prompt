@@ -1,0 +1,63 @@
+Prompt 1: Initial Analysis
+I need to implement a Behave BDD scenario for Rfuel based on an existing Jag framework test. 
+Context:
+- Jag reference scenario: D:\bdd_jag\features\AC-4011_OPTIC_Pay_Once_for_Food_and_Fuel\RPOS-4993_Optic_KAM_Need_to_receive_notifications_from_Fuel_Controller_for_all_state_changes.feature (Scenario: Prepay, fuel below tender amount)
+- Target feature file: D:\RetalixFuel-BDD-main\Retalix\bdd\features\PerPay.feature
+- Proxy files: fuelcontrol_proxy.py, simpump_proxy.py
+- C++ APIs available in: D:\C++
+Please analyze the Jag scenario and list:
+1. What steps are needed for the Rfuel implementation
+2. Which existing proxy APIs can be reused
+3. Which new proxy wrappers need to be created
+4. Any gaps between Jag and Rfuel frameworks
+
+Prompt 2: Feature File Generation
+Generate the Behave feature scenario for PerPay.feature with this test case:
+Scenario: Prepay - Prepay Unbalanced transaction
+  Given Initializing GPI Interfaces
+  When I select pump <pump_number>
+  And I Authorize Prepay for $<auth_amount> on pump
+  And I Set the flow rate on pump to <flow_rate>
+  And the nozzle is lifted on pump
+  And the grade is selected on pump
+  Then fueling is started on pump
+  And I fuel <Fuel_amount>
+  And I hang up the nozzle
+  And the configured prompt 'YOURCHANGE' is displayed
+  And the ICR should display welcome prompt
+  And Clear the Prepay transaction
+Examples:
+  | pump_number | auth_amount | flow_rate | Fuel_amount |
+  | "1"         | 5000        | 20        | 2000        |
+Follow the existing feature file structure in D:\RetalixFuel-BDD-main\Retalix\bdd\features\
+
+Prompt 3: Proxy API Wrappers
+Based on the scenario steps, I need to create Python proxy wrappers in fuelcontrol_proxy.py for these C++ FCC APIs:
+[List the APIs you identified from C++ folder(D:\C++)]
+Requirements:
+1. Follow the existing proxy pattern in fuelcontrol_proxy.py
+2. Add only the raw APIs.
+3. Include docstrings with parameter descriptions
+4. Return appropriate data types for Behave assertions
+5.Constants move to the enums\pumps.py
+Generate the proxy wrapper functions.
+
+Prompt 4: Step Definitions
+Create Behave step definitions for the new scenario steps that don't exist yet.
+Context:
+- Use ONLY proxy APIs from fuelcontrol_proxy.py and simpump_proxy.py
+- Follow existing step patterns in D:\RetalixFuel-BDD-main\Retalix\bdd\features\steps\
+- Reuse existing steps where possible
+- Add logging for each step execution
+New steps needed:
+[List steps that don't exist in current framework]
+Generate the step definition code with proper decorators (@given, @when, @then).
+
+Prompt 5: Validation & Integration
+Review the complete implementation:
+1. Verify all proxy APIs are properly imported in step definitions
+2. Check parameter passing from feature file to steps
+3. Ensure proper wait/polling for pump state changes
+4. Add assertions for expected outcomes
+5. Suggest any error handling improvements
+Provide a checklist of what to verify before running the test.

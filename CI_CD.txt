@@ -1,0 +1,53 @@
+CI/CD pipeline
+A CI/CD pipeline is a series of automated steps that streamline and accelerate the process of developing, testing, and deploying software. It ensures that code changes are consistently integrated, tested, and deployed to production or other environments with minimal human intervention.
+
+CI/CD Explained
+
+	1.	CI (Continuous Integration):
+	•	Developers frequently merge their code changes into a shared repository (e.g., Git).
+	•	Automated build and testing tools validate the code to catch errors early.
+	•	Goal: Ensure the codebase remains in a deployable state.
+	2.	CD (Continuous Deployment/Delivery):
+	•	Continuous Delivery: After passing tests, the code is automatically prepared for deployment. Deployment to production may require manual approval.
+	•	Continuous Deployment: Extends Continuous Delivery by fully automating deployment to production without manual approval.
+
+Pipeline Components
+
+A CI/CD pipeline typically includes the following stages:
+	1.	Source Stage:
+	•	Triggered by code changes pushed to a repository (e.g., GitHub, GitLab).
+	•	Pulls the latest code from the repository.
+	2.	Build Stage:
+	•	Compiles the code, resolves dependencies, and packages the application.
+	•	Example tools: Maven, Gradle, npm, Docker.
+	3.	Test Stage:
+	•	Runs automated tests (unit, integration, end-to-end).
+	•	Ensures the application behaves as expected.
+	•	Example tools: JUnit, Selenium, Postman.
+	4.	Release Stage:
+	•	Prepares the application for deployment.
+	•	Creates deployable artifacts (e.g., Docker images, .jar files).
+	5.	Deploy Stage:
+	•	Deploys the application to environments like staging or production.
+	•	May use blue-green, canary, or rolling deployment strategies.
+	6.	Monitor Stage:
+	•	Monitors the application’s health post-deployment.
+	•	Tools: Prometheus, Grafana, ELK Stack.
+
+Benefits of a CI/CD Pipeline
+
+	•	Faster Development Cycles: Reduces time from code commit to deployment.
+	•	Improved Quality: Automated testing catches bugs early.
+	•	Consistency: Minimizes manual errors in deployment.
+	•	Scalability: Easily handles frequent updates or large teams.
+	•	Reliability: Ensures every deployment is tested and predictable.
+
+Example of a CI/CD Workflow
+
+	•	Scenario: A developer pushes a code update.
+	1.	The pipeline automatically builds the application.
+	2.	Tests run to validate the change.
+	3.	If all tests pass, the pipeline packages the application.
+	4.	The application is deployed to a staging environment for further checks.
+	5.	Upon approval, it is deployed to production.
+

@@ -1,0 +1,89 @@
+It is a container management service. We can create self-contained environments know as containers.
+
+“DockerNet” is not a commonly used term in the context of Docker, but it likely refers to Docker networks—a feature in Docker that enables containers to communicate with each other and the outside world.
+
+Here’s a detailed explanation:
+
+Docker Networking
+
+Docker networking allows containers to communicate with:
+	1.	Each other (in the same or different networks).
+	2.	The host machine.
+	3.	External networks, like the internet.
+
+Docker automatically creates and manages networks to ensure containers are isolated and can interact as needed.
+
+Types of Docker Networks
+
+Docker provides several types of networks:
+	1.	Bridge Network (Default):
+	•	Used when containers need to communicate on the same host.
+	•	Containers in the same bridge network can communicate using their container names.
+	•	Example:
+
+docker network create my_bridge_network
+docker run --network my_bridge_network --name container1 my_image
+docker run --network my_bridge_network --name container2 my_image
+
+In this setup, container1 can ping container2 using its name.
+
+	2.	Host Network:
+	•	The container shares the host machine’s network stack.
+	•	Used for performance-critical applications where networking overhead must be minimized.
+	•	Example:
+
+docker run --network host my_image
+
+
+	3.	None:
+	•	The container has no network interface.
+	•	Typically used for security or debugging.
+	•	Example:
+
+docker run --network none my_image
+
+
+	4.	Overlay Network:
+	•	Allows containers on different hosts (in a Docker Swarm or Kubernetes cluster) to communicate.
+	•	Example:
+
+docker network create -d overlay my_overlay_network
+
+
+	5.	Macvlan Network:
+	•	Assigns a MAC address to each container, making it appear as a physical device on the network.
+	•	Used for low-level network integration.
+
+Commands to Manage Docker Networks
+
+	1.	List networks:
+
+docker network ls
+
+
+	2.	Inspect a network:
+
+docker network inspect <network_name>
+
+
+	3.	Create a network:
+
+docker network create <network_name>
+
+
+	4.	Connect a container to a network:
+
+docker network connect <network_name> <container_name>
+
+
+	5.	Disconnect a container from a network:
+
+docker network disconnect <network_name> <container_name>
+
+When to Use Docker Networks
+
+	•	Use bridge networks for communication between containers on the same host.
+	•	Use overlay networks in multi-host setups, such as Docker Swarm or Kubernetes.
+	•	Use host networks for performance-critical workloads.
+	•	Use none for isolated containers.
+

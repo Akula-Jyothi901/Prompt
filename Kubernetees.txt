@@ -1,0 +1,73 @@
+Kubernetes (often abbreviated as K8s) is an open-source platform for managing and orchestrating containerized applications. It automates tasks such as deployment, scaling, and managing containerized workloads, making it easier to run applications reliably in any environment.
+
+Key Features of Kubernetes
+
+	1.	Container Orchestration:
+		Automatically manages the deployment, scaling, and operation of containers (e.g., Docker containers).
+	2.	Scalability:
+	              Can automatically scale applications up or down based on demand or defined metrics.
+	3.	Self-Healing:
+		Restarts failed containers.
+		Replaces containers if they crash or become unresponsive.
+		Reschedules containers if a node fails.
+	4.	Load Balancing:
+		Distributes network traffic evenly across containers to ensure high availability.
+	5.	Declarative Configuration:
+		Uses YAML or JSON files to define the desired state of the application (e.g., number of replicas, resource limits).
+		Kubernetes ensures the system matches the desired state.
+	6.	Multi-Environment Support:
+		Can run on-premises, in the cloud (e.g., AWS, Azure, Google Cloud), or in hybrid setups.
+	7.	Service Discovery and Networking:
+		Provides internal DNS to allow containers to discover and communicate with each other.
+		Supports advanced networking configurations.
+	8.	Rolling Updates and Rollbacks:
+		Updates applications incrementally to ensure zero downtime.
+		Can roll back changes if something goes wrong.
+
+Core Concepts in Kubernetes
+
+	1.	Cluster:
+		A collection of machines (nodes) where Kubernetes runs containerized applications.
+		Consists of:
+		Control Plane: Manages the cluster (e.g., API Server, Scheduler).
+		Worker Nodes: Run the actual application containers.
+	2.	Pod:
+		The smallest deployable unit in Kubernetes.
+		Represents one or more containers that share storage, networking, and specifications.
+	3.	Node:
+		A physical or virtual machine in the cluster that runs Pods.
+	4.	Service:
+		Exposes an application running in a set of Pods as a network service, making it accessible to other components or users.
+	5.	Deployment:
+		Manages the desired state of application Pods and handles scaling and updates.
+	6.	Namespace:
+		A logical partition within a cluster to isolate workloads (e.g., for development, testing, and production).
+	7.	Ingress:
+		Manages external access to services, typically via HTTP or HTTPS.
+	8.	ConfigMap/Secret:
+		Stores configuration data or sensitive information for applications.
+
+How Kubernetes Works
+
+	1.	You Define the Desired State:
+		For example, a Deployment YAML specifies that you want 5 replicas of a containerized web app.
+	2.	Kubernetes Ensures the Desired State:
+		It schedules containers to run on nodes, monitors their health, and restarts or moves them if needed.
+	3.	Handles Scaling and Updates:
+		Automatically adjusts the number of containers based on resource usage.
+		Performs rolling updates with zero downtime.
+
+Benefits of Kubernetes
+
+	•	Portability: Run anywhere (on-premises, cloud, hybrid).
+	•	High Availability: Ensures application uptime through redundancy and self-healing.
+	•	Efficient Resource Usage: Optimizes the use of hardware resources.
+	•	Automation: Reduces the manual effort needed for managing applications.
+	•	Ecosystem Integration: Integrates with many tools (e.g., Helm, Prometheus, Istio).
+
+Kubernetes vs Docker
+
+	•	Docker is a container runtime that allows you to create and run containers.
+	•	Kubernetes is an orchestrator that manages multiple containers and coordinates them across machines.
+
+They are often used together: Docker to create containers and Kubernetes to manage and orchestrate them.

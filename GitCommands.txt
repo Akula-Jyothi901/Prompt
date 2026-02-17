@@ -1,0 +1,36 @@
+Url: ncrvoyix-swt-cfr/RetalixFuel-BDD at retalixfuel-bdd-anitha
+
+	1. Open the git bash
+	2. Go to the automation directory 
+	3. Login to git
+	git config --global user.email "PunyaLakshmiDurgaJyothi.Akula@ncrvoyix.com"
+	git config --global user.name "pa185140_ncrvoyix"
+	git config --global user.password "Airakutti@111"
+	4. Initialise the git :
+	 git init
+	5. Switch to the branch where you want to commit
+	git checkout -b retalixfuel-bdd-jyothi
+	6. Get the current code
+	 git clone --branch Feature/RFUEL-14236-Preset-limit-with-volume-for-Prepay-and-Postpay-transaction --single-branch https://github.com/ncrvoyix-swt-cfr/RetalixFuel-BDD.git
+	git checkout "https://github.com/ncrvoyix-swt-cfr/RetalixFuel-BDD.git"
+	7. On the visual studio open that branch and add your changes
+	8. Compare the changes and move them to staging
+	9. Do the commit and push
+
+
+
+First clone the existing repor/sync the existing changes.
+Git clone "https://github.com/ncrvoyix-swt-cfr/RetalixFuel-BDD.git"
+
+Create a new branch in the VS to where you want to commit the changes
+Git checkout
+
+Add the files
+
+
+Before
+
+Add the new changes flag there, move the things to staging and check the differences
+Review with copilot
+Commit the changes
+Pull and create a PR

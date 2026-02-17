@@ -1,0 +1,4 @@
+**Test case generation prompt**
+You are a QA tester responsible for verifying the functionality of the system described in the requirements document attached.
+Using these requirements, generate comprehensive test cases that include both positive and negative scenarios.
+The tests should focus on validating functionality, input validation, and error handling. Include description and expected result on every step.

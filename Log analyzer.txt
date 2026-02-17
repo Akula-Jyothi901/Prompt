@@ -1,0 +1,25 @@
+I need a Python script that reads and parses log files to detect common error patterns, such as "access violation", "index out of bounds", and any similar critical errors.
+
+The script should:
+Accept a log file path as an argument.
+Search each line for known error keywords or patterns.
+Output all detected error lines with their line numbers.
+Provide a summary of which error types were found and how many occurrences of each.
+Can you help me write this Python tool? Please include configurable error patterns and ensure the script is robust for large log files.
+
+
+I need a Python script that reads and parses log files to detect common error patterns, such as "access violation", "index out of bounds", and any similar critical errors.
+
+The script should:
+
+Accept either a single log file path OR a folder path as an argument.
+If a folder path is provided, recursively scan all log files in that directory (e.g., files with extensions like .log, .txt, or configurable patterns).
+Search each line in all log files for known error keywords or patterns.
+Output all detected error lines with their file names and line numbers.
+Provide a summary report showing:
+Which error types were found
+How many occurrences of each error type
+Which files contained errors
+Support configurable error patterns that can be easily extended.
+
+Can you help me write this enhanced Python log analysis tool with both single file and folder scanning capabilities?

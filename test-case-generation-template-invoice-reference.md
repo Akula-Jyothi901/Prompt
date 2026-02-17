@@ -1,0 +1,191 @@
+# Test Case Generation Prompt Template
+## For POS/Retail System Requirements
+
+Use this template with AI tools to generate detailed test cases from requirement documents.
+
+---
+
+## Prompt Template
+
+```
+You are a QA test engineer for a retail POS system tasked with creating comprehensive test cases from the following requirement.
+
+### REQUIREMENT DETAILS:
+**Requirement ID:** [REQ-ID] (e.g., REQ-12801)
+**Version:** [Version Number]
+**Date:** [Date]
+**Title:** [Requirement Title]
+**Module/Component:** [e.g., Positive32, TraSrv, TraEdit, Slipdata]
+
+**Background:**
+[Provide the business context and why this requirement exists]
+
+**Requirements:**
+[Paste the detailed requirement description including user stories and flow]
+
+### SOLUTION DESCRIPTION:
+**High Level Solution:**
+[Describe how the solution works at a high level]
+
+**Areas of Change:**
+[List the modules/components being modified:
+- Module 1: Purpose
+- Module 2: Purpose
+- Module 3: Purpose]
+
+**Configuration Requirements:**
+[Any new configurations, parameters, or settings needed]
+
+### BUSINESS SCENARIOS COVERED:
+[List all business scenarios from the requirement document]
+1. Scenario 1: [Title and brief description]
+2. Scenario 2: [Title and brief description]
+3. Additional scenarios...
+
+### EXPECTED BEHAVIOR:
+**Positive Scenarios:**
+- [Describe successful flow with valid inputs]
+- [Include all system interactions and responses]
+
+**Negative Scenarios:**
+- [Invalid inputs or blank entries]
+- [Error conditions]
+- [Edge cases]
+
+**System Integration Points:**
+- [Receipt generation]
+- [TRA file updates]
+- [Electronic Journal (EJ)]
+- [Database/backend systems]
+
+**Data Specifications:**
+- Character limits: [e.g., Max 100 characters]
+- Allowed characters: [e.g., alphanumeric, special characters]
+- Mandatory/Optional fields: [Specify which fields are required]
+
+**User Roles Involved:**
+- [Cashier]
+- [Customer]
+- [System Administrator (if applicable)]
+
+---
+
+### OUTPUT FORMAT:
+
+Generate test cases in the following structured format for POS testing:
+
+**Test Case ID:** TC-[REQ-ID]-[Sequential Number] (e.g., TC-12801-001)
+**Title:** [Clear, concise test case title describing the scenario]
+**Module:** [Positive32/TraSrv/TraEdit/Slipdata/Integration]
+**Priority:** [Critical/High/Medium/Low]
+**Test Type:** [Functional/UI/Integration/Data Validation/Receipt Validation]
+
+**Preconditions:**
+- [Specific configuration enabled: e.g., "Free text prompt for Invoice to Customer is enabled"]
+- [User logged in with appropriate role: e.g., Cashier role]
+- [Test data available: e.g., Invoice customers configured, items in inventory]
+- [Any specific system state required]
+
+**Test Steps:**
+1. [Action: e.g., "Log in to POS as cashier with valid credentials"]
+2. [Action: e.g., "Scan or select items for purchase (Item ID: [specify])"]
+3. [Action: e.g., "Select 'Invoice to Customer' payment method"]
+4. [Action: e.g., "Select invoice group '[Name]'"]
+5. [Action: e.g., "Select invoice customer 'Customer X'"]
+6. [Verification: e.g., "Verify free text reference prompt appears"]
+7. [Action: e.g., "Enter reference text: '[test data]'"]
+8. [Action: e.g., "Click OK/Submit"]
+9. [Action: e.g., "Complete the transaction"]
+10. [Verification: e.g., "Verify receipt is generated"]
+
+**Expected Result:**
+- [Step-by-step expected outcomes, e.g.:]
+  - After step 5: Free text dialog prompt appears with message "[configured message]"
+  - After step 7: Text is accepted and displayed in the dialog
+  - After step 9: Transaction completes successfully
+  - Receipt contains the reference text in the correct location
+  - TRA file record includes the reference text in field [field name]
+  - Electronic Journal (EJ) displays the reference text
+  - No error messages are displayed
+
+**Test Data:**
+- Invoice Group: [e.g., "Standard Invoice Group"]
+- Invoice Customer: [e.g., "Customer X", "Company ABC"]
+- Reference Text: [Provide specific examples]
+  - Valid: "John Doe", "PROJ-2025-001", "Department 123"
+  - Invalid: [if applicable]
+- Items: [e.g., "Item SKU-001, Price: $10.00"]
+
+**Data Validation Points:**
+- [ ] Receipt output verification
+- [ ] TRA file field verification (specify field name/location)
+- [ ] Electronic Journal (EJ) entry verification
+- [ ] Character limit enforcement (Max: [X] characters)
+
+**Postconditions:**
+- [Transaction is completed and saved]
+- [Receipt is printed/displayed with reference text]
+- [TRA file is updated with reference text]
+- [EJ contains the transaction with reference text]
+- [System is ready for next transaction]
+
+---
+
+### COVERAGE REQUIREMENTS:
+
+Please generate test cases covering:
+
+1. ✅ **Positive Flow Testing** (Happy Path)
+   - Valid text entry with alphabetical characters
+   - Valid text entry with numbers
+   - Valid text entry with alphanumeric combination
+   - Successful receipt generation with reference text
+   - TRA file correctly populated
+   - EJ correctly displays reference
+
+2. ✅ **Negative Testing** (Error Scenarios)
+   - Blank/empty text entry
+   - Closing dialog without entering text
+   - Invalid characters (if restrictions exist)
+   - Exceeding character limit (Max characters + 1)
+
+3. ✅ **Boundary Testing**
+   - Minimum length: 1 character
+   - Maximum length: [X] characters (e.g., 100)
+   - Exactly at character limit
+   - One character over limit
+
+4. ✅ **Integration Testing**
+   - Receipt format and content verification
+   - TRA file integration
+   - Electronic Journal integration
+   - Payment flow integration with Invoice to Customer
+
+5. ✅ **UI/Usability Testing**
+   - Dialog prompt appearance and message clarity
+   - Input field functionality
+   - Button functionality (OK, Cancel, Close)
+   - Error message display (if applicable)
+
+6. ✅ **Configuration Testing**
+   - Feature enabled vs disabled
+   - Character limit configuration
+   - Prompt message configuration
+   - Optional vs mandatory configuration
+
+7. ✅ **User Role Testing**
+   - Cashier permissions
+   - Different invoice customer selections
+   - Multiple invoice groups
+
+Generate at least **15-20** test cases ensuring comprehensive coverage of all scenarios, modules, and integration points.
+
+---
+
+### SPECIAL FOCUS AREAS:
+
+- **Receipt Validation:** Ensure reference text appears correctly formatted
+- **TRA File Validation:** Verify correct field mapping and data integrity
+- **Character Handling:** Test special characters, spaces, international characters
+- **Performance:** Response time for dialog display and transaction completion
+- **Regression:** Ensure existing invoice payment flows are not impacted
